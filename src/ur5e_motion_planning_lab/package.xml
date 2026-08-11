@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ur5e_motion_planning_lab</name>
+  <version>0.1.0</version>
+  <description>
+    Learning/experiment package for ROS 2 Humble + MoveIt 2 motion planning on a
+    UR5e, using fake (mock) hardware. Covers joint/pose goals, Cartesian paths,
+    collision objects, OMPL planner comparison, Pilz Industrial Motion Planner,
+    orientation constraints, and attach/detach for pick-and-place.
+  </description>
+  <maintainer email="sid@example.com">Sid</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Core MoveIt / ROS 2 runtime deps. moveit_py is the modern Python binding
+       (replaces the deprecated moveit_commander used in most older tutorials). -->
+  <exec_depend>moveit_py</exec_depend>
+  <exec_depend>moveit_ros_planning_interface</exec_depend>
+  <exec_depend>moveit_msgs</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>shape_msgs</exec_depend>
+  <exec_depend>tf_transformations</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+
+  <!-- Provided by ros-humble-ur (apt metapackage) - ur_robot_driver,
+       ur_moveit_config, ur_description ship as prebuilt binaries, no
+       source build needed. See README.md section 2. -->
+  <exec_depend>ur_moveit_config</exec_depend>
+  <exec_depend>ur_robot_driver</exec_depend>
+  <exec_depend>ur_description</exec_depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

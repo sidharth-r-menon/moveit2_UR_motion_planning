@@ -1,0 +1,10 @@
+# ROS/colcon build artifacts
+build/
+install/
+log/
+
+# Identifier files
+**/.Identifier
+**/.identifier
+*.Identifier
+*.identifier

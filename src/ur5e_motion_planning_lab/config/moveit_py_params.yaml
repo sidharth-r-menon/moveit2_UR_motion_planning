@@ -1,0 +1,98 @@
+# Named plan_request_params blocks for moveit_py.
+#
+# Each top-level key here becomes a string you pass to
+# PlanRequestParameters(moveit, "<key>") in Python -- moveit_py reads these
+# as ROS node parameters at MoveItPy construction time, it does NOT let you
+# set planning_pipeline / planner_id as plain Python attributes after
+# construction (that was wrong in an earlier draft of this package -- fixed).
+#
+# Loaded via MoveItConfigsBuilder(...).to_dict() merge in mgi_base.py, or
+# pass this file's path explicitly if you're not using the builder pattern.
+#
+# planner_id values below are OMPL's default plugin names as of Humble.
+# Full list: ompl_planning.yaml in ur_moveit_config, or
+#   ros2 param get /move_group ompl.planner_configs
+
+# --- OMPL: RRTConnect (default, good general-purpose bidirectional search) ---
+ompl_rrtc:
+  plan_request_params:
+    planning_attempts: 5
+    planning_pipeline: ompl
+    planner_id: "RRTConnectkConfigDefault"
+    max_velocity_scaling_factor: 0.5
+    max_acceleration_scaling_factor: 0.5
+    planning_time: 2.0
+
+# --- OMPL: RRT* (asymptotically optimal, slower, shorter/smoother paths) ---
+ompl_rrtstar:
+  plan_request_params:
+    planning_attempts: 5
+    planning_pipeline: ompl
+    planner_id: "RRTstarkConfigDefault"
+    max_velocity_scaling_factor: 0.5
+    max_acceleration_scaling_factor: 0.5
+    planning_time: 5.0
+
+# --- OMPL: PRM* (probabilistic roadmap, good for repeated queries in a
+#     static scene since it builds a reusable roadmap) ---
+ompl_prmstar:
+  plan_request_params:
+    planning_attempts: 5
+    planning_pipeline: ompl
+    planner_id: "PRMstarkConfigDefault"
+    max_velocity_scaling_factor: 0.5
+    max_acceleration_scaling_factor: 0.5
+    planning_time: 5.0
+
+# --- OMPL: EST (Expansive Space Trees, fast but less consistent) ---
+ompl_est:
+  plan_request_params:
+    planning_attempts: 5
+    planning_pipeline: ompl
+    planner_id: "ESTkConfigDefault"
+    max_velocity_scaling_factor: 0.5
+    max_acceleration_scaling_factor: 0.5
+    planning_time: 3.0
+
+# --- OMPL: KPIECE (kinodynamic-friendly, projection-based) ---
+ompl_kpiece:
+  plan_request_params:
+    planning_attempts: 5
+    planning_pipeline: ompl
+    planner_id: "KPIECEkConfigDefault"
+    max_velocity_scaling_factor: 0.5
+    max_acceleration_scaling_factor: 0.5
+    planning_time: 3.0
+
+# --- Pilz: PTP (point-to-point, joint-space trapezoidal profile, no
+#     straight-line guarantee in task space -- fast, deterministic) ---
+pilz_ptp:
+  plan_request_params:
+    planning_attempts: 1
+    planning_pipeline: pilz_industrial_motion_planner
+    planner_id: "PTP"
+    max_velocity_scaling_factor: 0.5
+    max_acceleration_scaling_factor: 0.5
+    planning_time: 1.0
+
+# --- Pilz: LIN (Cartesian straight-line, trapezoidal Cartesian velocity
+#     profile -- requires pilz_cartesian_limits.yaml to be loaded) ---
+pilz_lin:
+  plan_request_params:
+    planning_attempts: 1
+    planning_pipeline: pilz_industrial_motion_planner
+    planner_id: "LIN"
+    max_velocity_scaling_factor: 0.3
+    max_acceleration_scaling_factor: 0.3
+    planning_time: 1.0
+
+# --- Pilz: CIRC (circular arc in Cartesian space, needs a center or
+#     interim point path constraint -- see ex6 for usage) ---
+pilz_circ:
+  plan_request_params:
+    planning_attempts: 1
+    planning_pipeline: pilz_industrial_motion_planner
+    planner_id: "CIRC"
+    max_velocity_scaling_factor: 0.3
+    max_acceleration_scaling_factor: 0.3
+    planning_time: 1.0

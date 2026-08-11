@@ -1,0 +1,8 @@
+# Required by Pilz LIN and CIRC. Values are deliberately conservative for
+# fake-hardware experiments and are scaled again by each MotionPlanRequest.
+robot_description_planning:
+  cartesian_limits:
+    max_trans_vel: 0.25     # m/s
+    max_trans_acc: 0.50     # m/s^2
+    max_trans_dec: -0.50    # m/s^2 (Pilz requires a negative deceleration)
+    max_rot_vel: 0.75       # rad/s

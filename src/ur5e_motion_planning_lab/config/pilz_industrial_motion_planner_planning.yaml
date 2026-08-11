@@ -1,0 +1,10 @@
+# Parameters for MoveIt's optional Pilz planning pipeline.
+# They are installed under the ``pilz_industrial_motion_planner`` namespace
+# by ur5e_fake_moveit_pilz.launch.py.
+planning_plugin: pilz_industrial_motion_planner/CommandPlanner
+request_adapters: >-
+  default_planner_request_adapters/FixWorkspaceBounds
+  default_planner_request_adapters/FixStartStateBounds
+  default_planner_request_adapters/FixStartStateCollision
+  default_planner_request_adapters/FixStartStatePathConstraints
+start_state_max_bounds_error: 0.1
