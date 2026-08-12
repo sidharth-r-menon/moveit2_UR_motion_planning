@@ -2,6 +2,9 @@
 build/
 install/
 log/
+build_docker/
+install_docker/
+log_docker/
 
 # Identifier files
 **/.Identifier

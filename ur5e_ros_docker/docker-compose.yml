@@ -1,0 +1,71 @@
+name: ur5-motion-lab
+
+services:
+  # Official UR simulator.  Its GUI is reachable from Windows at
+  # http://localhost:6080/vnc.html .  ROS talks to it over the private
+  # Docker network, never through the Windows/WSL network boundary.
+  ursim:
+    image: universalrobots/ursim_e-series
+    container_name: ursim
+    environment:
+      ROBOT_MODEL: UR5
+    ports:
+      - "5900:5900"
+      - "6080:6080"
+    networks:
+      ur_lab_net:
+        ipv4_address: 192.168.56.101
+    volumes:
+      - ursim_programs:/ursim/programs
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/127.0.0.1/29999'"]
+      interval: 2s
+      timeout: 1s
+      retries: 45
+      start_period: 10s
+
+  # One workspace container runs the driver and MoveIt. Headless mode sends
+  # the UR control script automatically; no External Control setup is needed.
+  ros:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ur5e-motion-lab:humble
+    container_name: ur_ros
+    environment:
+      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      ROS_DOMAIN_ID: 42
+      # The Windows X server (VcXsrv) receives RViz from this Linux container.
+      DISPLAY: host.docker.internal:0.0
+      QT_X11_NO_MITSHM: "1"
+      LIBGL_ALWAYS_SOFTWARE: "1"
+    # The UR driver runs a 500 Hz control loop.  Allow the driver process to
+    # request FIFO scheduling inside Docker Desktop's Linux VM.
+    cap_add:
+      - SYS_NICE
+    ulimits:
+      rtprio: 99
+      memlock: -1
+    depends_on:
+      ursim:
+        condition: service_healthy
+    networks:
+      ur_lab_net:
+        ipv4_address: 192.168.56.102
+    working_dir: /ws
+    volumes:
+      - ../ur5e_moveit_ws:/ws
+    command: ["bash", "/usr/local/bin/start_ros_stack.sh"]
+    stdin_open: true
+    tty: true
+
+networks:
+  ur_lab_net:
+    name: ur_lab_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.56.0/24
+
+volumes:
+  ursim_programs:
